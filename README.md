@@ -16,14 +16,23 @@ https://superuser.com/questions/162092/how-can-i-register-a-custom-protocol-with
 
 ```
 
+# make executable and application files
+
 sudo chmod +x citksnap.sh
 sudo cp citksnap.sh /usr/bin
 sudo cp citksnap.desktop /usr/share/applications
 
-#setup custom app
+#setup custom mime type
+
 xdg-mime default citksnap.desktop x-scheme-handler/citksnap
 
 #confirm
+
 xdg-mime query default x-scheme-handler/citksnap
+
+# test open
+
+xdg-open itksnap://123123
+
 
 ```
