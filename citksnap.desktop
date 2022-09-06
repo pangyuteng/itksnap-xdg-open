@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=mycustomexec
+Comment=Customize itk-snap handeler
+Exec=mycustomexec.sh %u
+Icon=mycustomexec-icon
+Type=Application
+Categories=ImageSegmentation;
+Terminal=true
+MimeType=x-scheme-handler/itksnap;
+Actions=ImageSegmentation;
+Keywords=ImageSegmentation
