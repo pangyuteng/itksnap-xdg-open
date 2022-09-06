@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=mycustomexec
+Name=citksnap
 Comment=Customize itk-snap handeler
-Exec=mycustomexec.sh %u
-Icon=mycustomexec-icon
+Exec=citksnap.sh %u
+Icon=citksnap
 Type=Application
 Categories=ImageSegmentation;
 Terminal=true
-MimeType=x-scheme-handler/itksnap;
+MimeType=x-scheme-handler/citksnap;
 Actions=ImageSegmentation;
 Keywords=ImageSegmentation
