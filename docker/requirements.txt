@@ -1,0 +1,4 @@
+PyQt6
+jinja2
+pydicom
+SimpleITK

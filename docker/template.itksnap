@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--ITK-SNAP (itksnap.org) Project File
+
+This file can be moved/copied along with the images that it references
+as long as the relative location of the images to the project file is 
+the same. Do not modify the SaveLocation entry, or this will not work.
+-->
+<!DOCTYPE registry [
+<!ELEMENT registry (entry*,folder*)>
+<!ELEMENT folder (entry*,folder*)>
+<!ELEMENT entry EMPTY>
+<!ATTLIST folder key CDATA #REQUIRED>
+<!ATTLIST entry key CDATA #REQUIRED>
+<!ATTLIST entry value CDATA #REQUIRED>
+]>
+<registry>
+  <entry key="SaveLocation" value="{{itksnap_workspace_folder}}" />
+  <entry key="Version" value="20170401" />
+  <folder key="Annotations" >
+    <entry key="Format" value="ITK-SNAP Annotation File" />
+    <entry key="FormatDate" value="20150624" />
+  </folder>
+  <folder key="Layers" >
+    <folder key="Layer[000]" >
+      <entry key="AbsolutePath" value="{{primary_dicom_file}}" />
+      <entry key="Role" value="MainRole" />
+      <folder key="IOHints" >
+        <entry key="Format" value="DICOM Image Series" />
+        <folder key="DICOM" >
+          <entry key="SeriesId" value="{{series_instance_uid}}.{{series_number}}{{slice_thickness}}{{rows}}{{columns}}" />
+          <folder key="DirectoryInfo" >
+            <entry key="ArraySize" value="1" />
+            <folder key="Entry[0]" >              
+              <entry key="Rows" value="{{rows}}" />
+              <entry key="Columns" value="{{columns}}" />
+              <entry key="NumberOfImages" value="{{depth}}" />
+              <entry key="Dimensions" value="{{rows}} x {{columns}} x {{depth}}" />
+              <entry key="SeriesDescription" value="" />
+              <entry key="SeriesId" value="{{series_instance_uid}}.{{series_number}}{{slice_thickness}}{{rows}}{{columns}}" />
+              <entry key="SeriesNumber" value="{{series_number}}" />
+            </folder>
+          </folder>
+        </folder>
+      </folder>
+      <folder key="LayerMetaData" >
+        <entry key="Alpha" value="255" />
+        <entry key="CustomNickName" value="" />
+        <entry key="Sticky" value="0" />
+        <folder key="DisplayMapping" >
+          <folder key="ColorMap" >
+            <entry key="Preset" value="Grayscale" />
+          </folder>
+          <folder key="Curve" >
+            <entry key="NumberOfControlPoints" value="3" />
+            <folder key="ControlPoint[0]" >
+              <entry key="tValue" value="0.370697" />
+              <entry key="xValue" value="0" />
+            </folder>
+            <folder key="ControlPoint[1]" >
+              <entry key="tValue" value="0.552967" />
+              <entry key="xValue" value="0.5" />
+            </folder>
+            <folder key="ControlPoint[2]" >
+              <entry key="tValue" value="0.735237" />
+              <entry key="xValue" value="1" />
+            </folder>
+          </folder>
+        </folder>
+      </folder>
+      <folder key="ProjectMetaData" >
+        <entry key="GaussianBlurScale" value="1" />
+        <entry key="RemappingExponent" value="3" />
+        <entry key="RemappingSteepness" value="0.04" />
+        <folder key="Files" >
+          <folder key="Grey" >
+            <entry key="Dimensions" value="{{rows}} {{columns}} {{depth}}" />
+            <entry key="Orientation" value="{{orientation_str}}" />
+          </folder>
+        </folder>
+        <folder key="IOHistory" >
+          <folder key="LabelImage" >
+            <entry key="ArraySize" value="1" />
+            <entry key="Element[0]" value="{{segmentation_file}}" />
+          </folder>
+        </folder>
+        <folder key="IRIS" >
+          <entry key="SliceViewLayerLayout" value="Stacked" />
+          <folder key="BoundingBox" >
+            <entry key="InterpolationMethod" value="Nearest" />
+            <entry key="ResampleDimensions" value="278 252 14" />
+            <entry key="SeedWithCurrentSegmentation" value="1" />
+            <folder key="ROIBox[0]" >
+              <entry key="Index" value="160" />
+              <entry key="Size" value="278" />
+            </folder>
+            <folder key="ROIBox[1]" >
+              <entry key="Index" value="77" />
+              <entry key="Size" value="252" />
+            </folder>
+            <folder key="ROIBox[2]" >
+              <entry key="Index" value="6" />
+              <entry key="Size" value="14" />
+            </folder>
+          </folder>
+          <folder key="DisplayMapping" >
+            <folder key="ColorMap" >
+              <entry key="Preset" value="Grayscale" />
+            </folder>
+            <folder key="Curve" >
+              <entry key="NumberOfControlPoints" value="3" />
+              <folder key="ControlPoint[0]" >
+                <entry key="tValue" value="0.370697" />
+                <entry key="xValue" value="0" />
+              </folder>
+              <folder key="ControlPoint[1]" >
+                <entry key="tValue" value="0.552967" />
+                <entry key="xValue" value="0.5" />
+              </folder>
+              <folder key="ControlPoint[2]" >
+                <entry key="tValue" value="0.735237" />
+                <entry key="xValue" value="1" />
+              </folder>
+            </folder>
+          </folder>
+          <folder key="LabelState" >
+            <entry key="CoverageMode" value="OverAll" />
+            <entry key="DrawingLabel" value="1" />
+            <entry key="OverwriteLabel" value="0" />
+            <entry key="PolygonInvert" value="0" />
+            <entry key="SegmentationAlpha" value="{{segmentation_alpha}}" />            
+          </folder>
+          <folder key="LabelTable" >
+            <entry key="NumberOfElements" value="{{ roi_dict | length }}" />
+            {% for k,v in roi_dict.items() %}<folder key="Element[{{v.element_idx}}]" >
+              <entry key="Alpha" value="255" />
+              <entry key="Color" value="{{v.color_str}}" />
+              <entry key="Flags" value="1 1" />
+              <entry key="Index" value="{{v.element_idx+1}}" />
+              <entry key="Label" value="{{v.label_str}}" />
+            </folder>
+            {% endfor %}
+          </folder>
+          <folder key="MeshOptions" >
+            <entry key="DecimateFeatureAngle" value="45" />
+            <entry key="DecimateMaximumError" value="0.002" />
+            <entry key="DecimatePreserveTopology" value="1" />
+            <entry key="DecimateTargetReduction" value="0.95" />
+            <entry key="GaussianError" value="0.03" />
+            <entry key="GaussianStandardDeviation" value="0.8" />
+            <entry key="MeshSmoothingBoundarySmoothing" value="0" />
+            <entry key="MeshSmoothingConvergence" value="0" />
+            <entry key="MeshSmoothingFeatureAngle" value="45" />
+            <entry key="MeshSmoothingFeatureEdgeSmoothing" value="0" />
+            <entry key="MeshSmoothingIterations" value="20" />
+            <entry key="MeshSmoothingRelaxationFactor" value="0.01" />
+            <entry key="UseDecimation" value="0" />
+            <entry key="UseGaussianSmoothing" value="1" />
+            <entry key="UseMeshSmoothing" value="0" />
+          </folder>
+        </folder>
+        <folder key="SNAP" >
+          <folder key="SnakeParameters" >
+            <entry key="AdvectionSpeedExponent" value="0" />
+            <entry key="AdvectionWeight" value="0" />
+            <entry key="AutomaticTimeStep" value="1" />
+            <entry key="Clamp" value="1" />
+            <entry key="CurvatureSpeedExponent" value="-1" />
+            <entry key="CurvatureWeight" value="0.2" />
+            <entry key="Ground" value="5" />
+            <entry key="LaplacianSpeedExponent" value="0" />
+            <entry key="LaplacianWeight" value="0" />
+            <entry key="PropagationSpeedExponent" value="1" />
+            <entry key="PropagationWeight" value="1" />
+            <entry key="SnakeType" value="RegionCompetition" />
+            <entry key="SolverAlgorithm" value="ParallelSparseField" />
+            <entry key="TimeStepFactor" value="1" />
+          </folder>
+        </folder>
+      </folder>
+    </folder>
+    <folder key="Layer[001]" >
+      <entry key="AbsolutePath" value="{{segmentation_file}}" />
+      <entry key="Role" value="SegmentationRole" />
+      <folder key="LayerMetaData" >
+        <entry key="Alpha" value="20" />
+        <entry key="CustomNickName" value="" />
+        <entry key="Sticky" value="1" />
+      </folder>
+    </folder>
+  </folder>
+</registry>

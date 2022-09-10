@@ -4,6 +4,26 @@ objective:
 
 in ubuntu, setup custom urls so chrome will open itksnap
 
+for example in chrome:
+
+```
+citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+```
+
+
+or run below in terminal:
+
+```
+xdg-open citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+```
+
+or for devs, run .sh in terminal:
+
+```
+cd gnome
+bash citksnap.sh citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+```
+
 ref
 
 https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
@@ -19,10 +39,10 @@ https://superuser.com/questions/162092/how-can-i-register-a-custom-protocol-with
 
 # make executable and application files
 
-sudo cp citksnap.sh /usr/bin
+sudo cp gnome/citksnap.sh /usr/bin
 sudo chmod +x /usr/bin/citksnap.sh
 
-sudo cp citksnap.desktop /usr/share/applications
+sudo cp gnome/citksnap.desktop /usr/share/applications
 sudo chmod 664 /usr/share/applications/citksnap.desktop
 
 #setup custom mime type

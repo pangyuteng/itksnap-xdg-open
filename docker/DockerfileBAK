@@ -1,0 +1,15 @@
+# RUN echo "Downloading C3D ..." \
+#     && mkdir /opt/c3d \
+#     && curl -sSL --retry 5 https://sourceforge.net/projects/c3d/files/c3d/Experimental/c3d-1.3.0-Linux-gcc64.tar.gz/download \
+#     | tar -xzC /opt/c3d \
+#     --strip-components=1 \
+#     --exclude=bin/c3d_gui \
+#     --exclude=bin/c2d \
+#     --exclude=lib
+# ENV C3DPATH=/opt/c3d/bin \
+#     PATH=/opt/c3d/bin:$PATH
+
+#if you require `docker run` to use `-u` flag.
+#RUN mkdir -p /.itksnap.org
+#RUN chown -R myuser:mygroupd /.itksnap.org
+#RUN chmod -R 777 /.itksnap.org
