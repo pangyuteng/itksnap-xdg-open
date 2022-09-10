@@ -16,5 +16,3 @@ WORKDIR /opt/citksnap
 COPY . .
 RUN chmod -R 777 /opt/citksnap
 
-RUN mkdir -p //.itksnap.org
-RUN chmod -R 777 //.itksnap.org/ITK-SNAP

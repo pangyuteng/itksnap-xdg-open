@@ -9,7 +9,7 @@ docker volume create \
     --driver local \
     --opt type=none \
     --opt o=bind \
-    --opt device=/home/${USER}/Downloads \
+    --opt device=/home/${USER}/Downloads/itk-snape-xdg-open/demo-image \
     --name mydownloads
 
 docker run -it --rm --privileged --net=host --ipc=host \
@@ -19,7 +19,7 @@ docker run -it --rm --privileged --net=host --ipc=host \
     -v /etc/group:/etc/group:ro \
     -v /etc/passwd:/etc/passwd:ro \
     -v /etc/shadow:/etc/shadow:ro \
-    -v mydownloads:/mydownloads \    
+    -v mydownloads:/mydownloads \
     -e CITKSNAP_URI \
     citksnap:latest \
-    bash
+    bash launcher.sh ${CITKSNAP_URI}
