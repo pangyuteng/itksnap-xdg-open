@@ -1,19 +1,10 @@
 import logging
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        #logging.FileHandler("debug.log"),
-        logging.StreamHandler()
-    ]
-)
-
 logger = logging.getLogger()
 
 import os
 import sys
 import time
+import datetime
 import traceback
 import subprocess
 from pathlib import Path
@@ -21,32 +12,41 @@ from argparse import ArgumentParser
 from jinja2 import Environment, FileSystemLoader
 import pydicom
 
+def parse_uri(custom_uri):
+
+    try:
+        mydict = {}
+        for item_str in custom_uri.replace('citksnap://','').split(','):
+            key,value = item_str.split('=')
+            mydict[key]=value
+
+        dicom_folder = mydict["dicom_folder"]
+        segmentation_file = mydict["segmentation_file"]
+        workdir = mydict["workdir"]
+
+    except:
+        traceback.print_exc()
+        raise ValueError("segmentation_file or dicom_folder or workdir not specified!")
+    
+    return dicom_folder, segmentation_file, workdir
+
 class ITKSnapLauncher(object):
 
-    def __init__(self,custom_uri,output_folder):
+    def __init__(self,custom_uri):
 
         self.custom_uri = custom_uri
-        self.output_folder = output_folder
+
         self.dicom_folder = None
-        self.segmentation_file = None
+        self.segmentation_file = None        
+        self.workdir = None
         self.itksnap_workspace_file = None
 
     # no need to do this if you just save you images as nitfi files!!!!!!!!!!!!!!!!!!!!!!!!!!!
     # alternatively update itksnap to take in dicom directory via cli
     def prepare(self):
-
-        try:
-            mydict = {}
-            for item_str in custom_uri.replace('citksnap://','').split(','):
-                key,value = item_str.split('=')
-                mydict[key]=value
-
-            self.dicom_folder = mydict["dicom_folder"]
-            self.segmentation_file = mydict["segmentation_file"]
-
-        except:
-            traceback.print_exc()
-            raise ValueError("segmentation_file or dicom_folder not specified!")
+        
+        self.dicom_folder,self.segmentation_file,self.workdir = \
+            parse_uri(self.custom_uri)
 
         # find dicom via glob
         s0 = time.time()    
@@ -68,11 +68,11 @@ class ITKSnapLauncher(object):
                 label_str=f'mylabel_{idx}',
             )
 
-        self.itksnap_workspace_file = os.path.join(self.output_folder,'workspace.itksnap')
+        self.itksnap_workspace_file = os.path.join(self.workdir,'workspace.itksnap')
         os.makedirs(os.path.dirname(self.itksnap_workspace_file),exist_ok=True)
 
         content_dict = dict(
-            itksnap_workspace_folder=self.output_folder,
+            itksnap_workspace_folder=self.workdir,
             primary_dicom_file=primary_dicom_file,
             segmentation_file=self.segmentation_file,
             series_instance_uid=ds.SeriesInstanceUID,
@@ -108,20 +108,31 @@ class ITKSnapLauncher(object):
         # after logic
         self.post()
 
-def main(custom_uri,output_folder):
-    inst = ITKSnapLauncher(custom_uri,output_folder)
+def main(custom_uri):
+    inst = ITKSnapLauncher(custom_uri)
     inst.run()
 
 if __name__ == "__main__":
-    logger.debug(f'{sys.argv}')
+    print(f'sys.argv {sys.argv}')
     parser = ArgumentParser(description="")
     parser.add_argument("custom_uri", type=str)
-    parser.add_argument("output_folder", type=str)
     args = parser.parse_args()
     custom_uri = args.custom_uri
-    output_folder = args.output_folder
+    
+    _,_, workdir = parse_uri(custom_uri)
+    tstamp = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    log_file = os.path.join(workdir,f"launcher-{tstamp}.log")
+    os.makedirs(workdir,exist_ok=True)
 
-    main(custom_uri,output_folder)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler()
+        ]
+    )
+    main(custom_uri)
 
 '''
 python3 launcher.py $CITKSNAP_URI /tmp/ok
