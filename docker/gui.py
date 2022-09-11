@@ -29,11 +29,11 @@ from PyQt6.QtWidgets import (
 class ItkSnapProcessMonitor(QtCore.QObject):
     itksnap_signal = QtCore.pyqtSignal(str)
     @QtCore.pyqtSlot()
-    def monitor_itksnap(self):        
+    def monitor_itksnap(self):
         while True:
             itk_alive = False
             time.sleep(1)
-            tmp = os.popen("ps -Af").read().split("\n")            
+            tmp = os.popen("ps -Af").read().split("\n")
             for x in tmp:
                 if "ITK-SNAP" in x:
                     itk_alive = True
@@ -47,7 +47,7 @@ class RoiManager(QWidget):
         self.resize(270, 110)        
 
         # hide close
-        self.setWindowFlags(QtCore.Qt.WindowType.WindowMinimizeButtonHint)
+        #self.setWindowFlags(QtCore.Qt.WindowType.WindowMinimizeButtonHint)
         
         self.mainLabel = QLabel("status:")
         self.myRichText = QTextEdit()
@@ -58,7 +58,7 @@ class RoiManager(QWidget):
         self.itksnapButton = QPushButton("launch itksnap")
         self.itksnapButton.setEnabled(False)
 
-        self.helpButton = QPushButton("show me protocol")        
+        self.helpButton = QPushButton("show me protocol")
         self.doneButton = QPushButton("done")
         self.doneButton.setToolTip("i am done and want to exit.")
         self.notdoneButton = QPushButton("not done")
@@ -71,9 +71,9 @@ class RoiManager(QWidget):
 
         layout = QVBoxLayout()
         layout.addWidget(self.itksnapButton)
-        layout.addWidget(self.helpButton)        
+        layout.addWidget(self.helpButton)
         layout.addWidget(self.mainLabel)
-        layout.addWidget(self.myRichText)        
+        layout.addWidget(self.myRichText)
         layout.addWidget(self.doneButton)
         layout.addWidget(self.notdoneButton)
         layout.addStretch()
@@ -88,11 +88,10 @@ class RoiManager(QWidget):
         self.done_file = os.path.join(self.workdir,f"reviewed.{self.user}.status")
         self.done_clicked = False
         self.notdone_clicked = False
-        self.start_process()
 
         self.itksnap_monitor = ItkSnapProcessMonitor()
-        self.thread = QtCore.QThread(self)        
-        self.itksnap_monitor.itksnap_signal.connect(self.itksnap_callback)        
+        self.thread = QtCore.QThread(self)
+        self.itksnap_monitor.itksnap_signal.connect(self.itksnap_callback)
         self.itksnap_monitor.moveToThread(self.thread)
         self.thread.started.connect(self.itksnap_monitor.monitor_itksnap)
         self.thread.start()
@@ -111,7 +110,7 @@ class RoiManager(QWidget):
                 self.myRichText.setHtml("itksnap close.<br>")
                 self.itkalive = False
 
-    def start_process(self):        
+    def start_process(self):
         status_file_list = [x for x in os.listdir(self.workdir) if x.endswith('.status')]
         reviewed_file_list = [x for x in os.listdir(self.workdir) if x.startswith('reviewed') and x.endswith('.status')]
         edit_file_list = [x for x in os.listdir(self.workdir) if x.startswith('editing') and x.endswith('.status')]
@@ -162,8 +161,9 @@ class RoiManager(QWidget):
             
             inst = ITKSnapLauncher(self.custom_uri)
             cmd_list = inst.run_elsewhere()
-            self.p = QtCore.QProcess()
-            self.p.start(cmd_list[0],cmd_list[1:])
+            self.itksnap_process = QtCore.QProcess()
+            self.itksnap_process.start(cmd_list[0],cmd_list[1:])
+            print(cmd_list)
         else:
             self.myRichText.setHtml("You clicked `Cancel`, thus itksnap is not launced, click `x` to exit.")
 
@@ -200,9 +200,11 @@ class RoiManager(QWidget):
                     os.remove(self.done_file)
             elif retval == QMessageBox.StandardButton.Cancel:
                 return
-        self.close()
 
-    def on_help_button_clicked(self):        
+        self.close()
+        
+
+    def on_help_button_clicked(self):
         logger.info("middle!")
         protocol_content = """
         + review and edit contours in itksnap.<br>
@@ -253,6 +255,7 @@ if __name__ == "__main__":
     app = QApplication([])
     main = RoiManager(custom_uri)
     main.show()
+    main.start_process() # start itk snap
     app.exec()
 
 
