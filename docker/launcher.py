@@ -96,10 +96,7 @@ class ITKSnapLauncher(object):
         with open(self.itksnap_workspace_file,'w') as f:
             content = j2_env.get_template('template.itksnap').render(**content_dict)
             f.write(content)
-
-    def post(self):
-        logger.info('running post steps')
-
+    
     def launch_itksnap(self):
         if self.itksnap_workspace_file is not None:
             cmd_list = ["itksnap","-w",self.itksnap_workspace_file]
@@ -109,13 +106,20 @@ class ITKSnapLauncher(object):
         out =subprocess.check_output(cmd_list)
         logger.debug(out)
 
+    # altnernative to run
+    def run_elsewhere(self):
+        self.prepare()
+        if self.itksnap_workspace_file is not None:
+            cmd_list = ["itksnap","-w",self.itksnap_workspace_file]
+        else:
+            cmd_list = ["itksnap","-g",self.image_file,"-s",self.segmentation_file]
+        return cmd_list
+
     def run(self):
         # before logic
         self.prepare()
         # launch snap to review and edit segmentations
         self.launch_itksnap()
-        # after logic
-        self.post()
 
 def main(custom_uri):
     inst = ITKSnapLauncher(custom_uri)

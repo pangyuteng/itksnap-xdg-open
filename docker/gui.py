@@ -12,7 +12,7 @@ from pathlib import Path
 from argparse import ArgumentParser
 from jinja2 import Environment, FileSystemLoader
 import pydicom
-from launcher import parse_uri
+from launcher import parse_uri, ITKSnapLauncher
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 LAUNCHER_EXE = os.path.join(THIS_DIR,"launcher.py")
@@ -45,6 +45,9 @@ class RoiManager(QWidget):
         
         self.setWindowTitle("RoiManager")
         self.resize(270, 110)        
+
+        # hide close
+        self.setWindowFlags(QtCore.Qt.WindowType.WindowMinimizeButtonHint)
         
         self.mainLabel = QLabel("status:")
         self.myRichText = QTextEdit()
@@ -94,7 +97,7 @@ class RoiManager(QWidget):
         self.thread.started.connect(self.itksnap_monitor.monitor_itksnap)
         self.thread.start()
         self.itkalive = False
-
+        
     @QtCore.pyqtSlot(str)
     def itksnap_callback(self,itk_alive):
         if ast.literal_eval(itk_alive):
@@ -156,8 +159,11 @@ class RoiManager(QWidget):
             with open(self.edit_file,'w') as f:
                 f.write("editing")
             self.myRichText.setHtml("please wait, launching itksnap... <br> remember to click `Save->Save *.nii.gz` before closing itksnap")
+            
+            inst = ITKSnapLauncher(self.custom_uri)
+            cmd_list = inst.run_elsewhere()
             self.p = QtCore.QProcess()
-            self.p.start("python3", [LAUNCHER_EXE,self.custom_uri])
+            self.p.start(cmd_list[0],cmd_list[1:])
         else:
             self.myRichText.setHtml("You clicked `Cancel`, thus itksnap is not launced, click `x` to exit.")
 
