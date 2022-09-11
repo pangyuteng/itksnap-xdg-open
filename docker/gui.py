@@ -112,6 +112,7 @@ class RoiManager(QWidget):
         status_file_list = [x for x in os.listdir(self.workdir) if x.endswith('.status')]
         reviewed_file_list = [x for x in os.listdir(self.workdir) if x.startswith('reviewed') and x.endswith('.status')]
         edit_file_list = [x for x in os.listdir(self.workdir) if x.startswith('editing') and x.endswith('.status')]
+        
         if len(status_file_list) != 0:
             msgBox = QMessageBox()
             if len(reviewed_file_list) == 1 and len(edit_file_list)==0:
@@ -148,7 +149,9 @@ class RoiManager(QWidget):
                     os.remove(os.path.join(self.workdir,x))
             elif retval == QMessageBox.StandardButton.Cancel:
                 is_launch = False
-        
+        else:
+            is_launch = True
+
         if is_launch:            
             with open(self.edit_file,'w') as f:
                 f.write("editing")
