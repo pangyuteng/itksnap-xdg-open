@@ -1,38 +1,36 @@
 
-project goal:
+#### project summary:
 
-in ubuntu gnome, setup custom urls so chrome will open itksnap within docker.
+In ubuntu-desktop, setup custom uri so chrome will load images and contours to a PyQt window and ITKSNAP within a docker container.
 
 for example in chrome:
 
 ```
-citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
-
 
 or run below in terminal:
 
 ```
-xdg-open citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+xdg-open citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
 
 or for devs, run .sh in terminal:
 
 ```
 cd gnome
-bash citksnap.sh citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+bash citksnap.sh citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
 
-ref
-```
-https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
-https://deluge.readthedocs.io/en/latest/how-to/set-mime-type.html
-https://help.gnome.org/admin/system-admin-guide/stable/mime-types-custom-user.html.en
-https://askubuntu.com/questions/62585/how-do-i-set-a-new-xdg-open-setting
+#### setup
 
-https://superuser.com/questions/162092/how-can-i-register-a-custom-protocol-with-xdg
-```
 
++ build container
+
+```
+cd docker
+bash build.sh
+```
 
 + make executable and application files
 
@@ -49,8 +47,6 @@ sudo chmod 664 /usr/share/applications/citksnap.desktop
 
 ```
 xdg-mime default citksnap.desktop x-scheme-handler/citksnap
-gio mime x-scheme-handler/citksnap citksnap.desktop
-
 update-desktop-database ~/.local/share/applications
 ```
 
@@ -62,6 +58,7 @@ xdg-mime query default x-scheme-handler/citksnap
 
 + ?? likely unecessary
 ```
+gio mime x-scheme-handler/citksnap citksnap.desktop
 update-mime-database ~/.local/share/mime
 gio mime x-scheme-handler/citksnap 
 ```
@@ -71,4 +68,24 @@ gio mime x-scheme-handler/citksnap
 ```
 chromium index.html
 ```
+
++ for actual deployment, update docker volume path in below file and correspondingly, paths in uri `citksnap://` for all production sites.
+
+```
+gnome/citksnap.sh
+```
+
+
+
+
+### references
+
+```
+https://unix.stackexchange.com/questions/497146/create-a-custom-url-protocol-handler
+https://deluge.readthedocs.io/en/latest/how-to/set-mime-type.html
+https://help.gnome.org/admin/system-admin-guide/stable/mime-types-custom-user.html.en
+https://askubuntu.com/questions/62585/how-do-i-set-a-new-xdg-open-setting
+https://superuser.com/questions/162092/how-can-i-register-a-custom-protocol-with-xdg
+```
+
 
