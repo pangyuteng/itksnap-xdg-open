@@ -6,20 +6,20 @@ In ubuntu-desktop, setup custom uri so chrome will load images and contours to a
 for example in chrome:
 
 ```
-citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
+citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
 
 or run below in terminal:
 
 ```
-xdg-open citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
+xdg-open citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
 
 or for devs, run .sh in terminal:
 
 ```
 cd gnome
-bash citksnap.sh citksnap://dicom_folder=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
+bash citksnap.sh citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz
 ```
 
 #### setup

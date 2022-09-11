@@ -20,15 +20,15 @@ def parse_uri(custom_uri):
             key,value = item_str.split('=')
             mydict[key]=value
 
-        dicom_folder = mydict["dicom_folder"]
+        image_file = mydict["image_file"]
         segmentation_file = mydict["segmentation_file"]
         workdir = mydict["workdir"]
 
     except:
         traceback.print_exc()
-        raise ValueError("segmentation_file or dicom_folder or workdir not specified!")
+        raise ValueError("segmentation_file or image_file or workdir not specified!")
     
-    return dicom_folder, segmentation_file, workdir
+    return image_file, segmentation_file, workdir
 
 class ITKSnapLauncher(object):
 
@@ -36,7 +36,7 @@ class ITKSnapLauncher(object):
 
         self.custom_uri = custom_uri
 
-        self.dicom_folder = None
+        self.image_file = None
         self.segmentation_file = None        
         self.workdir = None
         self.itksnap_workspace_file = None
@@ -45,9 +45,14 @@ class ITKSnapLauncher(object):
     # alternatively update itksnap to take in dicom directory via cli
     def prepare(self):
         
-        self.dicom_folder,self.segmentation_file,self.workdir = \
+        self.image_file,self.segmentation_file,self.workdir = \
             parse_uri(self.custom_uri)
 
+        if os.path.isdir(self.image_file):
+            self.prepare_workspace()
+
+    def prepare_workspace(self):
+        self.dicom_folder = self.image_file
         # find dicom via glob
         s0 = time.time()    
         dicom_file_list = [x for x in Path(self.dicom_folder).rglob('*.dcm')]
@@ -96,7 +101,11 @@ class ITKSnapLauncher(object):
         logger.info('running post steps')
 
     def launch_itksnap(self):
-        cmd_list = ["itksnap","-w",self.itksnap_workspace_file]
+        if self.itksnap_workspace_file is not None:
+            cmd_list = ["itksnap","-w",self.itksnap_workspace_file]
+        else:
+            cmd_list = ["itksnap","-g",self.image_file,"-s",self.segmentation_file]
+
         out =subprocess.check_output(cmd_list)
         logger.debug(out)
 

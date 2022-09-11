@@ -8,7 +8,7 @@ export USER=$(whoami)
 # itksnap -g $image_file -s $segmentation_file
 
 # #option 2 do prep work in py file then launch itksnap
-# python3 launcher.py $CITKSNAP_URI
+#python3 launcher.py $CITKSNAP_URI
 
 # option 3 add additional gui for addon user-interaction outside itksnap
 python3 gui.py ${CITKSNAP_URI}

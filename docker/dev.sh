@@ -1,5 +1,5 @@
 #!/bin/bash
-export CITKSNAP_URI=citksnap://dicom_folder=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
+export CITKSNAP_URI=citksnap://image_file=/mydownloads/2020-fibrosis/dcm,segmentation_file=/mydownloads/2020-fibrosis/nice.nii.gz
 
 echo "run below in docker to debug"
 echo bash launcher.sh "$"CITKSNAP_URI
