@@ -3,6 +3,10 @@
 
 In ubuntu-desktop, setup custom uri so chrome will load images and contours to a PyQt window and ITKSNAP within a docker container.
 
+Checkout the corresponding youtube clip for a step by step tutorial.
+https://www.youtube.com/watch?v=l3LyFTeypb0
+
+
 for example in chrome:
 
 ```
