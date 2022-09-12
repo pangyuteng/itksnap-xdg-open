@@ -10,20 +10,20 @@ https://www.youtube.com/watch?v=l3LyFTeypb0
 for example in chrome:
 
 ```
-citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz,workdir=/demo-image
+citksnap://image_file=/demo-image/dcm&segmentation_file=/demo-image/contours.nii.gz&workdir=/demo-image
 ```
 
 or run below in terminal:
 
 ```
-xdg-open citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz,workdir=/demo-image
+xdg-open citksnap://image_file=/demo-image/dcm&segmentation_file=/demo-image/contours.nii.gz&workdir=/demo-image
 ```
 
 or for devs, run .sh in terminal:
 
 ```
 cd gnome
-bash citksnap.sh citksnap://image_file=/demo-image/dcm,segmentation_file=/demo-image/contours.nii.gz,workdir=/demo-image
+bash citksnap.sh citksnap://image_file=/demo-image/dcm&segmentation_file=/demo-image/contours.nii.gz&workdir=/demo-image
 ```
 
 #### setup

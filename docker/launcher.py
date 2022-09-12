@@ -16,7 +16,7 @@ def parse_uri(custom_uri):
 
     try:
         mydict = {}
-        for item_str in custom_uri.replace('citksnap://','').split(','):
+        for item_str in custom_uri.replace('citksnap://','').split('&'):
             key,value = item_str.split('=')
             mydict[key]=value
 
