@@ -40,7 +40,7 @@ bash build.sh
 
 ```
 sudo cp gnome/citksnap.sh /usr/bin
-sudo chmod +x /usr/bin/citksnap.sh
+sudo chmod 755 /usr/bin/citksnap.sh
 
 sudo cp gnome/citksnap.desktop /usr/share/applications
 sudo chmod 664 /usr/share/applications/citksnap.desktop
