@@ -50,21 +50,23 @@ sudo chmod 664 /usr/share/applications/citksnap.desktop
 + setup custom mime type
 
 ```
-xdg-mime default citksnap.desktop x-scheme-handler/citksnap
-update-desktop-database ~/.local/share/applications
+
+sudo su
+cp mimeapps.lists /etc/xdg/mimeapps.lists
+chmod 644 /etc/xdg/mimeapps.lists
+
+export username=hola
+# sudo mkhomedir_helper $username 
+sudo -u $username xdg-mime default citksnap.desktop x-scheme-handler/citksnap
+
+
+
 ```
 
 + confirm app linking is setup
 
 ```
 xdg-mime query default x-scheme-handler/citksnap
-```
-
-+ ?? likely unecessary
-```
-gio mime x-scheme-handler/citksnap citksnap.desktop
-update-mime-database ~/.local/share/mime
-gio mime x-scheme-handler/citksnap 
 ```
 
 + click demo url in chrome:
@@ -90,6 +92,16 @@ https://deluge.readthedocs.io/en/latest/how-to/set-mime-type.html
 https://help.gnome.org/admin/system-admin-guide/stable/mime-types-custom-user.html.en
 https://askubuntu.com/questions/62585/how-do-i-set-a-new-xdg-open-setting
 https://superuser.com/questions/162092/how-can-i-register-a-custom-protocol-with-xdg
+```
+
++ OUDATED
+```
+xdg-mime default citksnap.desktop x-scheme-handler/citksnap
+update-desktop-database ~/.local/share/applications
+
+gio mime x-scheme-handler/citksnap citksnap.desktop
+update-mime-database ~/.local/share/mime
+gio mime x-scheme-handler/citksnap 
 ```
 
 
